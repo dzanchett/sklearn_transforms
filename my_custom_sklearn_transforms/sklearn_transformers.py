@@ -7,10 +7,16 @@ class DropColumns(BaseEstimator, TransformerMixin):
         self.columns = columns
 
     def fit(self, X, y=None):
-        return self
+        d = X.copy()
+        self.f = pd.Series([d[column].value_counts().index[0]
+            if d[column].dtype == np.dtype('O') else d[column].mean() for column in d],
+            index=d.columns)
 
+        return self
+    
     def transform(self, X):
         # Primeiro realizamos a cópia do dataframe 'X' de entrada
         data = X.copy()
         # Retornamos um novo dataframe sem as colunas indesejadas
-        return data.drop(labels=self.columns, axis='columns')
+        data = data.drop(labels=self.columns, axis='columns')
+        return data.fillna(self.f)
