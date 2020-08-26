@@ -5,10 +5,12 @@ from sklearn.base import BaseEstimator, TransformerMixin
 class DropColumns(BaseEstimator, TransformerMixin):
     def __init__(self, columns):
         import pandas as pd
+        import numpy as np
         self.columns = columns
 
     def fit(self, X, y=None):
         import pandas as pd
+        import numpy as np
         d = X.copy()
         self.f = pd.Series([d[column].value_counts().index[0]
             if d[column].dtype == np.dtype('O') else d[column].mean() for column in d],
