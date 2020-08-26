@@ -8,6 +8,7 @@ class DropColumns(BaseEstimator, TransformerMixin):
         self.columns = columns
 
     def fit(self, X, y=None):
+        import pandas as pd
         d = X.copy()
         self.f = pd.Series([d[column].value_counts().index[0]
             if d[column].dtype == np.dtype('O') else d[column].mean() for column in d],
